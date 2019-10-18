@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using WebApp.Models;
 
 namespace WebApp.Data
 {
-    public class WebAppContext : DbContext
+    public class WebAppContext : IdentityDbContext<ApplicationUser>
     {
         public WebAppContext(DbContextOptions options) : base(options) { }
 

@@ -10,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using WebApp.Data;
 using WebApp.Data.Repositories;
+using Microsoft.AspNetCore.Identity;
+using WebApp.Models;
 
 namespace WebApp
 {
@@ -30,6 +32,13 @@ namespace WebApp
                 options.UseSqlServer(_config.GetConnectionString("WebAppConnection"));
             });
 
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                options.Password.RequiredLength = 6;
+
+            })
+            .AddEntityFrameworkStores<WebAppContext>();
+
             services.AddTransient<DbSeeder>();
             services.AddScoped<ITeacherRepository, TeacherRepository>();
             services.AddScoped<IStudentRepository, StudentRepository>();
@@ -46,11 +55,12 @@ namespace WebApp
 
             app.UseStaticFiles();
 
+            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Account}/{action=Login}/{id?}");
             });
 
             seeder.SeedDatabase().Wait();
