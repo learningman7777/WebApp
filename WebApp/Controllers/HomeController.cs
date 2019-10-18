@@ -24,6 +24,7 @@ namespace WebApp.Controllers
             _teacherRepository = teacherRepository;
             _studentRepository = studentRepository;
         }
+        [Authorize]
         public IActionResult Index()
         {
             var teachers = _teacherRepository.GetAllTeachers();
@@ -37,7 +38,7 @@ namespace WebApp.Controllers
             return View(viewModel);
         }
         
-        [Authorize]
+        [Authorize(Roles ="Admin")]
         public IActionResult Student()
         {
             var students = _studentRepository.GetAllStudents();
@@ -53,6 +54,7 @@ namespace WebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public IActionResult Student(StudentTeacherViewModel model)
         {
             if (ModelState.IsValid)
